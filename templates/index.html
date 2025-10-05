@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Best Text Extractor - Free to Use</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #3d5afe;
+      --accent: #e040fb;
+      --success: #00e676;
+      --background-dark: linear-gradient(135deg, #0f111a 0%, #1c1e2a 100%);
+      --text-light: #eee;
+      --text-muted: #aaa;
+      --container-bg-dark: #222433;
+      --shadow-color-dark: rgba(0, 0, 0, 0.7);
+      --input-bg-dark: #1a1c2b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background-dark);
+      color: var(--text-light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      text-align: center;
+      max-width: 700px;
+      font-weight: 500;
+      user-select: none;
+      font-style: italic;
+      letter-spacing: 0.04em;
+    }
+
+    .container {
+      display: flex;
+      max-width: 1100px;
+      width: 100%;
+      background: var(--container-bg-dark);
+      box-shadow: 0 10px 40px var(--shadow-color-dark);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 40px;
+      gap: 16px;
+    }
+
+    .left-panel h1 {
+      font-size: 56px;
+      font-weight: 900;
+      line-height: 1.1;
+      user-select: none;
+      text-shadow: 0 0 5px rgba(255 255 255 / 0.4);
+    }
+
+    .right-panel {
+      flex: 1.2;
+      background: #2a2d42;
+      padding: 30px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      border-radius: 0 16px 16px 0;
+    }
+
+    .laptop-frame {
+      width: 100%;
+      max-width: 480px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+      background: #1a1c2b;
+      border: 2px solid #44475a;
+      padding: 20px;
+      position: relative;
+      color: var(--text-light);
+    }
+
+    .laptop-top-bar {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 12px;
+      background: #44475a;
+      border-radius: 8px 8px 0 0;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+    }
+
+    form#uploadForm {
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    form#uploadForm p {
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+      user-select: none;
+    }
+
+    form#uploadForm label {
+      background-color: var(--primary);
+      color: white;
+      padding: 10px 30px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 12px;
+      transition: background 0.3s;
+      user-select: none;
+    }
+
+    form#uploadForm label:hover {
+      background-color: #5c6bc0;
+    }
+
+    form#uploadForm input[type="file"] {
+      display: none;
+    }
+
+    form#uploadForm button {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      user-select: none;
+    }
+
+    form#uploadForm button:hover {
+      background-color: #ab47bc;
+    }
+
+    .output-area {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .preview-box, .text-box {
+      border: 1px solid #555;
+      border-radius: 10px;
+      background: #2a2d42;
+      padding: 15px;
+      max-height: 220px;
+      overflow-y: auto;
+      user-select: text;
+      color: var(--text-light);
+    }
+
+    .preview-box img {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #666;
+    }
+
+    .text-box pre {
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 14px;
+      color: #ddd;
+      margin: 8px 0 0 0;
+    }
+
+    .heading-with-copy {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      user-select: none;
+    }
+
+    .heading-with-copy strong {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    #copyBtn {
+      all: unset;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    #copyBtn:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+    }
+
+    #fileInfo {
+      font-style: italic;
+      color: var(--text-muted);
+      margin-top: 8px;
+      user-select: text;
+    }
+
+    #status {
+      margin-top: 16px;
+      text-align: center;
+      font-weight: 600;
+      user-select: none;
+      color: var(--text-light);
+    }
+
+    #status.success {
+      color: var(--success);
+    }
+
+    #status.error {
+      color: #ff5555;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .left-panel, .right-panel {
+        flex: unset;
+        width: 100%;
+        padding: 30px 20px;
+        border-radius: 16px;
+      }
+
+      .left-panel h1 {
+        font-size: 36px;
+        text-align: center;
+      }
+
+      .left-panel .subheading {
+        text-align: center;
+        margin: 0 auto;
+      }
+
+      .laptop-frame {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="subtitle">Extract text effortlessly from images and documents with our free, easy-to-use tool.</div>
+
+  <div class="container">
+    <div class="left-panel">
+      <h1>BEST TEXT EXTRACTOR</h1>
+    </div>
+
+    <div class="right-panel">
+      <div class="laptop-frame">
+        <div class="laptop-top-bar"></div>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+          <p>Select an image (PNG, JPG, BMP) or text file (TXT)</p>
+          <label for="fileInput">Choose File</label>
+          <input type="file" id="fileInput" name="file" accept=".png,.jpg,.jpeg,.bmp,.txt" required />
+          <button type="submit">Extract Text</button>
+        </form>
+
+        <div class="output-area hidden" id="outputArea">
+          <div class="preview-box">
+            <strong>Preview:</strong>
+            <img id="imagePreview" src="" class="hidden" />
+            <p id="fileInfo" class="hidden">Text file uploaded (no preview).</p>
+          </div>
+
+          <div class="text-box">
+            <div class="heading-with-copy">
+              <strong>Extracted Text:</strong>
+              <button id="copyBtn" title="Copy text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h6a2 2 0 002-2v-6a2 2 0 00-2-2h-6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
+            <pre id="extractedText" class="hidden"></pre>
+          </div>
+        </div>
+
+        <div id="status"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const outputArea = document.getElementById('outputArea');
+    const imagePreview = document.getElementById('imagePreview');
+    const fileInfo = document.getElementById('fileInfo');
+    const extractedText = document.getElementById('extractedText');
+    const status = document.getElementById('status');
+    const copyBtn = document.getElementById('copyBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      outputArea.classList.add('hidden');
+      extractedText.classList.add('hidden');
+      imagePreview.classList.add('hidden');
+      fileInfo.classList.add('hidden');
+      extractedText.textContent = '';
+      status.textContent = 'Processing...';
+      status.className = '';
+
+      try {
+        const res = await fetch('/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          outputArea.classList.remove('hidden');
+
+          if (result.image_preview) {
+            imagePreview.src = result.image_preview;
+            imagePreview.classList.remove('hidden');
+            fileInfo.classList.add('hidden');
+          } else {
+            fileInfo.classList.remove('hidden');
+          }
+
+          extractedText.textContent = result.extracted_text;
+          extractedText.classList.remove('hidden');
+
+          status.textContent = 'Text extracted successfully!';
+          status.classList.add('success');
+        } else {
+          status.textContent = result.error || 'An error occurred.';
+          status.classList.add('error');
+        }
+
+      } catch (err) {
+        status.textContent = 'Error: ' + err.message;
+        status.classList.add('error');
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      const text = extractedText.textContent;
+      if (!text) return;
+
+      navigator.clipboard.writeText(text).then(() => {
+        status.textContent = 'Copied to clipboard!';
+        status.className = 'success';
+
+        setTimeout(() => {
+          status.textContent = '';
+          status.className = '';
+        }, 2000);
+      }).catch(() => {
+        status.textContent = 'Failed to copy.';
+        status.className = 'error';
+      });
+    });
+  </script>
+
+</body>
+</html>
