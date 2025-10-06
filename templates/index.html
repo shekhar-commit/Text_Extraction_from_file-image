@@ -249,6 +249,10 @@
       color: #ff5555;
     }
 
+    .hidden {
+      display: none !important;
+    }
+
     @media (max-width: 900px) {
       .container {
         flex-direction: column;
@@ -291,9 +295,9 @@
         <div class="laptop-top-bar"></div>
 
         <form id="uploadForm" enctype="multipart/form-data">
-          <p>Select an image (PNG, JPG, BMP) or text file (TXT)</p>
+          <p>Select an image (PNG, JPG, BMP) or document (TXT, PDF, CSV)</p>
           <label for="fileInput">Choose File</label>
-          <input type="file" id="fileInput" name="file" accept=".png,.jpg,.jpeg,.bmp,.txt" required />
+          <input type="file" id="fileInput" name="file" accept=".png,.jpg,.jpeg,.bmp,.txt,.pdf,.csv" required />
           <button type="submit">Extract Text</button>
         </form>
 
@@ -301,7 +305,7 @@
           <div class="preview-box">
             <strong>Preview:</strong>
             <img id="imagePreview" src="" class="hidden" />
-            <p id="fileInfo" class="hidden">Text file uploaded (no preview).</p>
+            <p id="fileInfo" class="hidden">Document uploaded (no preview).</p>
           </div>
 
           <div class="text-box">
@@ -342,6 +346,7 @@
       const formData = new FormData();
       formData.append('file', file);
 
+      // Reset UI
       outputArea.classList.add('hidden');
       extractedText.classList.add('hidden');
       imagePreview.classList.add('hidden');

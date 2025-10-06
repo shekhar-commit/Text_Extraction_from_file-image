@@ -7,7 +7,7 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 
 def preprocess_image(image):
     """
-    Advanced preprocessing to improve OCR accuracy:
+    Advanced preprocessing to improve OCR accuracy (works for Hindi Devanagari script):
     - Convert to grayscale
     - Apply bilateral filter to reduce noise while keeping edges sharp
     - Adaptive thresholding for better binarization
@@ -27,9 +27,10 @@ def extract_text_from_image(path):
         return ""
 
     processed = preprocess_image(image)
-    text = pytesseract.image_to_string(processed, lang='eng')
+    # Use 'eng+hin' for mixed English-Hindi text. Change to 'hin' for pure Hindi.
+    text = pytesseract.image_to_string(processed, lang='eng+hin')
 
-    # Clean up extracted text
+    # Clean up extracted text (removes empty lines, preserves Unicode for Hindi)
     lines = [line.strip() for line in text.split('\n') if line.strip()]
     cleaned_text = ' '.join(lines)
     return cleaned_text
